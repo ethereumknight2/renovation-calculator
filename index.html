@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Renovation Cost Estimator</title>
+    <style>
+        /* Reset styles to prevent interference with parent page */
+        #construction-calculator-widget * {
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+        
+        #construction-calculator-widget {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            color: #333;
+            overflow: hidden;
+        }
+        
+        #construction-calculator-widget .calculator-container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        
+        #construction-calculator-widget h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        #construction-calculator-widget .tab-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        #construction-calculator-widget .tab {
+            padding: 12px 10px;
+            cursor: pointer;
+            background-color: #eee;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 15px;
+        }
+        
+        #construction-calculator-widget .tab.active {
+            background-color: #2B3B5F;
+            color: white;
+            font-weight: bold;
+            border: 1px solid #2B3B5F;
+        }
+        
+        #construction-calculator-widget .tab:hover {
+            background-color: #e0e0e0;
+        }
+        
+        #construction-calculator-widget .calculator {
+            display: none;
+        }
+        
+        #construction-calculator-widget .calculator.active {
+            display: block;
+        }
+        
+        #construction-calculator-widget .form-group {
+            margin-bottom: 15px;
+        }
+        
+        #construction-calculator-widget label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        #construction-calculator-widget select, 
+        #construction-calculator-widget input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        #construction-calculator-widget button {
+            background-color: #2B3B5F;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        #construction-calculator-widget button:hover {
+            background-color: #3e5285;
+        }
+        
+        #construction-calculator-widget .result-container {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        #construction-calculator-widget .result-container h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        #construction-calculator-widget .estimate-breakdown {
+            background-color: white;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+            display: none;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: black;
+        }
+        
+        #construction-calculator-widget .estimate-breakdown h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        
+        #construction-calculator-widget .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 500;
+            color: black;
+        }
+        
+        #construction-calculator-widget .breakdown-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+        }
+        
+        #construction-calculator-widget .breakdown-item span {
+            color: black;
+        }
+        
+        #construction-calculator-widget .disclaimer {
+            font-size: 8px;
+            color: #aaa;
+            margin-top: 10px;
+            text-align: center;
+            font-style: italic;
+            line-height: 1;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #construction-calculator-widget .disclaimer p {
+            margin: 0;
+            padding: 0;
+            font-size: 8px !important;
+        }
+        
+        /* Lead Form Styles */
+        #construction-calculator-widget .lead-form-container {
+            display: none;
+            margin-top: 20px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        #construction-calculator-widget .lead-form-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2B3B5F;
+            font-size: 18px;
+        }
+        
+        #construction-calculator-widget .lead-form-subtitle {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        #construction-calculator-widget .lead-form-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        #construction-calculator-widget .lead-form-button {
+            background-color: #2B3B5F;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        #construction-calculator-widget .lead-form-button:hover {
+            background-color: #3e5285;
+        }
+        
+        #construction-calculator-widget .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        #construction-calculator-widget .form-row .lead-form-input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        #construction-calculator-widget .lead-form-success {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+            color: #3c763d;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        #construction-calculator-widget .privacy-note {
+            font-size: 11px;
+            color: #777;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 767px) {
+            #construction-calculator-widget .tab-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+            }
+            
+            #construction-calculator-widget .tab {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            
+            #construction-calculator-widget .tab.active {
+                background-color: #2c3e50;
+                color: white;
+                border: 1px solid #2c3e50;
+            }
+            
+            #construction-calculator-widget .calculator-container {
+                padding: 12px;
+                border-radius: 5px;
+            }
+            
+            #construction-calculator-widget h1 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            #construction-calculator-widget label {
+                font-size: 14px;
+            }
+            
+            #construction-calculator-widget select, 
+            #construction-calculator-widget input {
+                font-size: 14px;
+                padding: 10px;
+            }
+            
+            #construction-calculator-widget .form-group {
+                margin-bottom: 10px;
+            }
+            
+            #construction-calculator-widget button {
+                padding: 12px;
+            }
+            
+            #construction-calculator-widget .result-container {
+                padding: 12px;
+            }
+            
+            #construction-calculator-widget .estimate-breakdown {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            #construction-calculator-widget .breakdown-item {
+                font-size: 13px;
+            }
+            
+            #construction-calculator-widget .disclaimer {
+                font-size: 7px !important;
+                margin-top: 8px;
+                line-height: 1;
+                max-width: 70%;
+            }
+            
+            #construction-calculator-widget .disclaimer p {
+                font-size: 7px !important;
+            }
+            
+            #construction-calculator-widget .form-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="construction-calculator-widget">
+        <div class="calculator-container">
+            <h1>Home Renovation Cost Estimator</h1>
+            
+            <div class="tab-container">
+                <div class="tab active" data-calc="flooring">Flooring</div>
+                <div class="tab" data-calc="kitchen">Kitchen Remodel</div>
+                <div class="tab" data-calc="bathroom">Bathroom Remodel</div>
+                <div class="tab" data-calc="basement">Basement Remodel</div>
+            </div>
+            
+            <!-- Flooring Calculator -->
+            <div id="flooring-calculator" class="calculator active">
+                <div class="form-group">
+                    <label for="flooring-type">Project Type:</label>
+                    <select id="flooring-type">
+                        <option value="new">New Installation</option>
+                        <option value="refinish">Refinish Existing Hardwood</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="flooring-material">Flooring Material:</label>
+                    <select id="flooring-material">
+                        <option value="laminate">Laminate</option>
+                        <option value="hardwood">Hardwood</option>
+                        <option value="engineered">Engineered Wood</option>
+                        <option value="tile">Tile</option>
+                        <option value="vinyl">Luxury Vinyl</option>
+                        <option value="carpet">Carpet</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="material-quality-group">
+                    <label for="flooring-quality">Material Quality:</label>
+                    <select id="flooring-quality">
+                        <option value="budget">Budget (Basic Grade, Builder Quality)</option>
+                        <option value="standard" selected>Standard (Mid-Grade, Good Durability)</option>
+                        <option value="premium">Premium (High-Grade, Superior Finish)</option>
+                        <option value="luxury">Luxury (Designer Series, Top Craftsmanship)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="refinish-color-change" style="display: none;">
+                    <label for="color-change">Color Change/Stain:</label>
+                    <select id="color-change">
+                        <option value="no">No - Keep Existing Color</option>
+                        <option value="light">Yes - Light Stain Change</option>
+                        <option value="dark">Yes - Dark Stain Change</option>
+                        <option value="custom">Yes - Custom/Special Stain</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="flooring-sqft">Square Footage:</label>
+                    <input type="number" id="flooring-sqft" min="1" value="100">
+                </div>
+                
+                <div class="form-group" id="old-floor-removal" style="display: block;">
+                    <label for="floor-removal">Old Floor Removal Required:</label>
+                    <select id="floor-removal">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                
+                <button onclick="calculateFlooring()">Calculate Estimate</button>
+                
+                <div class="result-container" id="flooring-result">
+                    <h3>Estimated Cost: <span id="flooring-cost">$0</span></h3>
+                    
+                    <div class="estimate-breakdown" id="flooring-breakdown">
+                        <h4>Cost Breakdown:</h4>
+                        <div class="breakdown-item">
+                            <span>Materials:</span>
+                            <span id="flooring-materials">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Labor:</span>
+                            <span id="flooring-labor">$0</span>
+                        </div>
+                        <div class="breakdown-item" id="flooring-removal-item">
+                            <span>Removal & Disposal:</span>
+                            <span id="flooring-removal">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kitchen Remodel Calculator -->
+            <div id="kitchen-calculator" class="calculator">
+                <div class="form-group">
+                    <label for="kitchen-size">Kitchen Size:</label>
+                    <select id="kitchen-size">
+                        <option value="small">Small (Less than 70 sq ft)</option>
+                        <option value="medium" selected>Medium (70-120 sq ft)</option>
+                        <option value="large">Large (120-200 sq ft)</option>
+                        <option value="xlarge">Extra Large (200+ sq ft)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kitchen-quality">Remodel Scope:</label>
+                    <select id="kitchen-quality">
+                        <option value="budget">Basic Update (Paint, Hardware, Minor Upgrades)</option>
+                        <option value="standard" selected>Full Remodel (New Cabinets, Counters, Fixtures)</option>
+                        <option value="premium">High-End Remodel (Premium Materials & Custom Features)</option>
+                        <option value="luxury">Luxury Renovation (Designer Finishes & Professional Appliances)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kitchen-layout">Layout Change:</label>
+                    <select id="kitchen-layout">
+                        <option value="no">No Layout Change (Keep Existing Layout)</option>
+                        <option value="minor">Minor Layout Change (Modify Some Elements)</option>
+                        <option value="major">Major Layout Change (Complete Reconfiguration)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kitchen-cabinets">Cabinet Type:</label>
+                    <select id="kitchen-cabinets">
+                        <option value="stock">Stock Cabinets</option>
+                        <option value="semi-custom" selected>Semi-Custom Cabinets</option>
+                        <option value="custom">Custom Cabinets</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kitchen-countertops">Countertop Material:</label>
+                    <select id="kitchen-countertops">
+                        <option value="laminate">Laminate</option>
+                        <option value="butcher">Butcher Block</option>
+                        <option value="granite" selected>Granite</option>
+                        <option value="quartz">Quartz</option>
+                        <option value="marble">Marble</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kitchen-appliances">Appliance Package:</label>
+                    <select id="kitchen-appliances">
+                        <option value="budget">Budget</option>
+                        <option value="standard" selected>Standard</option>
+                        <option value="premium">Premium</option>
+                        <option value="luxury">Luxury</option>
+                    </select>
+                </div>
+                
+                <button onclick="calculateKitchen()">Calculate Estimate</button>
+                
+                <div class="result-container" id="kitchen-result">
+                    <h3>Estimated Cost: <span id="kitchen-cost">$0</span></h3>
+                    
+                    <div class="estimate-breakdown" id="kitchen-breakdown">
+                        <h4>Cost Breakdown:</h4>
+                        <div class="breakdown-item">
+                            <span>Cabinets & Countertops:</span>
+                            <span id="kitchen-cab-counter">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Appliances:</span>
+                            <span id="kitchen-appl">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Labor & Installation:</span>
+                            <span id="kitchen-labor">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Plumbing & Electrical:</span>
+                            <span id="kitchen-plumb-elec">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bathroom Remodel Calculator -->
+            <div id="bathroom-calculator" class="calculator">
+                <div class="form-group">
+                    <label for="bathroom-type">Bathroom Type:</label>
+                    <select id="bathroom-type">
+                        <option value="powder">Powder Room</option>
+                        <option value="full" selected>Full Bathroom</option>
+                        <option value="master">Master Bathroom</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bathroom-quality">Remodel Scope:</label>
+                    <select id="bathroom-quality">
+                        <option value="budget">Basic Update (Paint, Hardware, Simple Fixtures)</option>
+                        <option value="standard" selected>Full Remodel (New Fixtures, Tile, Vanity)</option>
+                        <option value="premium">High-End Remodel (Walk-in Shower, Premium Materials)</option>
+                        <option value="luxury">Luxury Spa Renovation (Heated Floors, Custom Features)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bathroom-layout">Layout Change:</label>
+                    <select id="bathroom-layout">
+                        <option value="no">No Layout Change</option>
+                        <option value="minor">Minor Layout Change (Fixtures Remain in Same Location)</option>
+                        <option value="major">Major Layout Change (Moving Plumbing Fixtures)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bathroom-fixtures">Fixture Replacement:</label>
+                    <select id="bathroom-fixtures">
+                        <option value="toilet">Toilet Only</option>
+                        <option value="some">Some Fixtures (Toilet, Sink)</option>
+                        <option value="all" selected>All Fixtures (Toilet, Sink, Shower/Tub)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bathroom-tile">Tile Work:</label>
+                    <select id="bathroom-tile">
+                        <option value="minimal">Minimal (Shower/Tub Area Only)</option>
+                        <option value="partial" selected>Partial (Shower/Tub Area and Floor)</option>
+                        <option value="full">Full (Floors and Walls)</option>
+                        <option value="custom">Custom Designer Tile Work</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bathroom-vanity">Vanity Type:</label>
+                    <select id="bathroom-vanity">
+                        <option value="pedestal">Pedestal Sink</option>
+                        <option value="stock">Stock Vanity</option>
+                        <option value="semi-custom" selected>Semi-Custom Vanity</option>
+                        <option value="custom">Custom Vanity</option>
+                        <option value="double">Double Vanity</option>
+                    </select>
+                </div>
+                
+                <button onclick="calculateBathroom()">Calculate Estimate</button>
+                
+                <div class="result-container" id="bathroom-result">
+                    <h3>Estimated Cost: <span id="bathroom-cost">$0</span></h3>
+                    
+                    <div class="estimate-breakdown" id="bathroom-breakdown">
+                        <h4>Cost Breakdown:</h4>
+                        <div class="breakdown-item">
+                            <span>Fixtures & Vanity:</span>
+                            <span id="bathroom-fix-vanity">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Tile & Flooring:</span>
+                            <span id="bathroom-tile-floor">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Labor & Installation:</span>
+                            <span id="bathroom-labor">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Plumbing & Electrical:</span>
+                            <span id="bathroom-plumb-elec">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Basement Remodel Calculator -->
+            <div id="basement-calculator" class="calculator">
+                <div class="form-group">
+                    <label for="basement-sqft">Square Footage:</label>
+                    <input type="number" id="basement-sqft" min="100" value="500">
+                </div>
+                
+                <div class="form-group">
+                    <label for="basement-quality">Remodel Scope:</label>
+                    <select id="basement-quality">
+                        <option value="budget">Basic Finish (Drywall, Simple Flooring, Essential Lighting)</option>
+                        <option value="standard" selected>Full Finish (Proper Insulation, Quality Flooring, Recessed Lighting)</option>
+                        <option value="premium">High-End Finish (Entertainment Area, Office Space, Premium Materials)</option>
+                        <option value="luxury">Luxury Build-Out (Home Theater, Custom Bar, Designer Features)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="basement-finished">Current State:</label>
+                    <select id="basement-finished">
+                        <option value="unfinished">Unfinished</option>
+                        <option value="partially">Partially Finished</option>
+                        <option value="finished">Previously Finished</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="basement-bathroom">Add Bathroom:</label>
+                    <select id="basement-bathroom">
+                        <option value="none">No Bathroom</option>
+                        <option value="half">Half Bathroom</option>
+                        <option value="full">Full Bathroom</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="basement-wetbar">Add Wet Bar/Kitchenette:</label>
+                    <select id="basement-wetbar">
+                        <option value="no">No</option>
+                        <option value="wetbar">Wet Bar</option>
+                        <option value="kitchenette">Kitchenette</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="basement-egress">Egress Window/Door Required:</label>
+                    <select id="basement-egress">
+                        <option value="no">No</option>
+                        <option value="window">Egress Window</option>
+                        <option value="door">Egress Door</option>
+                    </select>
+                </div>
+                
+                <button onclick="calculateBasement()">Calculate Estimate</button>
+                
+                <div class="result-container" id="basement-result">
+                    <h3>Estimated Cost: <span id="basement-cost">$0</span></h3>
+                    
+                    <div class="estimate-breakdown" id="basement-breakdown">
+                        <h4>Cost Breakdown:</h4>
+                        <div class="breakdown-item">
+                            <span>Framing & Drywall:</span>
+                            <span id="basement-framing">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Flooring & Finishing:</span>
+                            <span id="basement-flooring">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Plumbing & Electrical:</span>
+                            <span id="basement-plumb-elec">$0</span>
+                        </div>
+                        <div class="breakdown-item" id="basement-bathroom-item" style="display: none;">
+                            <span>Bathroom Installation:</span>
+                            <span id="basement-bath-cost">$0</span>
+                        </div>
+                        <div class="breakdown-item" id="basement-wetbar-item" style="display: none;">
+                            <span>Wet Bar/Kitchenette:</span>
+                            <span id="basement-wetbar-cost">$0</span>
+                        </div>
+                        <div class="breakdown-item" id="basement-egress-item" style="display: none;">
+                            <span>Egress Installation:</span>
+                            <span id="basement-egress-cost">$0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lead Capture Form -->
+            <div class="lead-form-container" id="lead-form-container">
+                <div class="lead-form-title">Get a Detailed Quote for Your Project</div>
+                <div class="lead-form-subtitle">Fill out this form to receive a personalized estimate from our renovation experts</div>
+                
+                <form id="lead-capture-form">
+                    <div class="form-row">
+                        <input type="text" class="lead-form-input" id="lead-first-name" placeholder="First Name" required>
+                        <input type="text" class="lead-form-input" id="lead-last-name" placeholder="Last Name" required>
+                    </div>
+                    
+                    <input type="email" class="lead-form-input" id="lead-email" placeholder="Your Email" required>
+                    <input type="tel" class="lead-form-input" id="lead-phone" placeholder="Phone Number">
+                    
+                    <div class="form-group">
+                        <label for="lead-timeframe">When are you planning to start your project?</label>
+                        <select id="lead-timeframe" class="lead-form-input">
+                            <option value="immediately">As soon as possible</option>
+                            <option value="1-3months">In the next 1-3 months</option>
+                            <option value="3-6months">In the next 3-6 months</option>
+                            <option value="future">Just researching for the future</option>
+                        </select>
+                    </div>
+                    
+                    <input type="hidden" id="lead-estimate-data" value="">
+                    <input type="hidden" id="lead-project-type" value="">
+                    
+                    <button type="submit" class="lead-form-button">Send Me My Detailed Estimate</button>
+                </form>
+                
+                <p class="privacy-note">Your information is secure and will not be shared. By submitting this form, you agree to be contacted about your renovation project.</p>
+            </div>
+            
+            <div class="lead-form-success" id="lead-form-success">
+                <p><strong>Thank You!</strong> Your estimate request has been submitted. One of our renovation experts will contact you shortly with a personalized quote.</p>
+            </div>
+            
+            <div class="disclaimer">
+                <p>*Estimates only. Actual costs may vary.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            document.querySelectorAll('#construction-calculator-widget .tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and calculators
+                    document.querySelectorAll('#construction-calculator-widget .tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('#construction-calculator-widget .calculator').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding calculator
+                    tab.classList.add('active');
+                    document.getElementById(`${tab.dataset.calc}-calculator`).classList.add('active');
+                });
+            });
+            
+            // Show/hide old floor removal option based on flooring type
+            // and restrict material options when refinishing
+            const flooringTypeSelect = document.getElementById('flooring-type');
+// Function to update UI based on flooring type
+            function updateFlooringUI() {
+                const removalDiv = document.getElementById('old-floor-removal');
+                const materialSelect = document.getElementById('flooring-material');
+                const materialQualityGroup = document.getElementById('material-quality-group');
+                const refinishColorChange = document.getElementById('refinish-color-change');
+                const currentMaterial = materialSelect.value;
+                
+                if (flooringTypeSelect.value === 'refinish') {
+                    // Hide removal option and material quality, show color change option
+                    removalDiv.style.display = 'none';
+                    materialQualityGroup.style.display = 'none';
+                    refinishColorChange.style.display = 'block';
+                    
+                    // Clear existing options
+                    materialSelect.innerHTML = '';
+                    
+                    // Add only hardwood option
+                    const option = document.createElement('option');
+                    option.value = 'hardwood';
+                    option.textContent = 'Hardwood';
+                    materialSelect.appendChild(option);
+                    materialSelect.value = 'hardwood';
+                    materialSelect.disabled = true;
+                } else {
+                    // Show removal option and material quality, hide color change option
+                    removalDiv.style.display = 'block';
+                    materialQualityGroup.style.display = 'block';
+                    refinishColorChange.style.display = 'none';
+                    
+                    // Only reset materials if currently disabled
+                    if (materialSelect.disabled) {
+                        // Restore all material options
+                        materialSelect.innerHTML = '';
+                        
+                        const materials = [
+                            {value: 'laminate', text: 'Laminate'},
+                            {value: 'hardwood', text: 'Hardwood'},
+                            {value: 'engineered', text: 'Engineered Wood'},
+                            {value: 'tile', text: 'Tile'},
+                            {value: 'vinyl', text: 'Luxury Vinyl'},
+                            {value: 'carpet', text: 'Carpet'}
+                        ];
+                        
+                        materials.forEach(mat => {
+                            const option = document.createElement('option');
+                            option.value = mat.value;
+                            option.textContent = mat.text;
+                            materialSelect.appendChild(option);
+                        });
+                        
+                        // Try to restore previous selection if it exists in the new options
+                        if (materials.some(m => m.value === currentMaterial)) {
+                            materialSelect.value = currentMaterial;
+                        } else {
+                            materialSelect.value = 'hardwood';
+                        }
+                        
+                        materialSelect.disabled = false;
+                    }
+                }
+            }
+            
+            // Run once on page load to set initial state
+            if (flooringTypeSelect) {
+                updateFlooringUI();
+                
+                // Add event listener for future changes
+                flooringTypeSelect.addEventListener('change', updateFlooringUI);
+            }
+            
+            // Lead generation functionality
+            // Function to show lead form after estimate calculation
+            function showLeadForm(projectType, estimateData) {
+                // Add the estimate data to the hidden fields
+                document.getElementById('lead-estimate-data').value = JSON.stringify(estimateData);
+                document.getElementById('lead-project-type').value = projectType;
+                
+                // Show the lead form
+                document.getElementById('lead-form-container').style.display = 'block';
+                
+                // Hide the success message if it was previously shown
+                document.getElementById('lead-form-success').style.display = 'none';
+                
+                // Scroll to the form
+                document.getElementById('lead-form-container').scrollIntoView({behavior: 'smooth'});
+            }
+            
+            // Add form submission handler
+            document.getElementById('lead-capture-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Collect form data
+                const formData = {
+                    firstName: document.getElementById('lead-first-name').value,
+                    lastName: document.getElementById('lead-last-name').value,
+                    email: document.getElementById('lead-email').value,
+                    phone: document.getElementById('lead-phone').value,
+                    timeframe: document.getElementById('lead-timeframe').value,
+                    projectType: document.getElementById('lead-project-type').value,
+                    estimateData: document.getElementById('lead-estimate-data').value
+                };
+                
+                // In a real implementation, you would send this data to your server or Leadpages form handler
+                // Example using fetch:
+                /*
+                fetch('https://your-leadpages-form-handler-url.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Show success message
+                    document.getElementById('lead-form-container').style.display = 'none';
+                    document.getElementById('lead-form-success').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error submitting your request. Please try again.');
+                });
+                */
+                
+                // For demo purposes, just show success message
+                document.getElementById('lead-form-container').style.display = 'none';
+                document.getElementById('lead-form-success').style.display = 'block';
+                document.getElementById('lead-form-success').scrollIntoView({behavior: 'smooth'});
+                
+                // Reset form
+                document.getElementById('lead-capture-form').reset();
+            });
+        });
+        
+        // Flooring Calculator
+        function calculateFlooring() {
+            const type = document.getElementById('flooring-type').value;
+            const material = document.getElementById('flooring-material').value;
+            const sqft = Number(document.getElementById('flooring-sqft').value);
+            
+            let materialCostPerSqft = 0;
+            let laborCostPerSqft = 0;
+            let removalCostPerSqft = 0;
+            let colorChangeCost = 0;
+            
+            if (type === 'refinish') {
+                // Refinishing costs
+                const colorChange = document.getElementById('color-change').value;
+                laborCostPerSqft = 3;
+                materialCostPerSqft = 1; // Refinishing supplies
+                
+                // Add color change costs if applicable
+                if (colorChange === 'light') {
+                    colorChangeCost = sqft * 0.5; // Additional cost for light stain change
+                } else if (colorChange === 'dark') {
+                    colorChangeCost = sqft * 0.75; // Additional cost for dark stain (requires more work)
+                } else if (colorChange === 'custom') {
+                    colorChangeCost = sqft * 1.25; // Additional cost for custom stain
+                }
+            } else {
+                // New installation costs
+                const quality = document.getElementById('flooring-quality').value;
+                const removal = document.getElementById('floor-removal').value;
+                
+                // Set material cost based on selection
+                if (material === 'laminate') {
+                    materialCostPerSqft = quality === 'budget' ? 1 : quality === 'standard' ? 1.5 : quality === 'premium' ? 2.5 : 4;
+                } else if (material === 'hardwood') {
+                    materialCostPerSqft = quality === 'budget' ? 3 : quality === 'standard' ? 5 : quality === 'premium' ? 7.5 : 10;
+                } else if (material === 'engineered') {
+                    materialCostPerSqft = quality === 'budget' ? 2 : quality === 'standard' ? 3 : quality === 'premium' ? 5 : 7;
+                } else if (material === 'tile') {
+                    materialCostPerSqft = quality === 'budget' ? 1.5 : quality === 'standard' ? 3 : quality === 'premium' ? 5 : 8;
+                } else if (material === 'vinyl') {
+                    materialCostPerSqft = quality === 'budget' ? 1 : quality === 'standard' ? 2 : quality === 'premium' ? 3 : 5;
+                } else if (material === 'carpet') {
+                    materialCostPerSqft = quality === 'budget' ? 0.8 : quality === 'standard' ? 1.5 : quality === 'premium' ? 2.5 : 4;
+                }
+                
+                // New installation labor
+                if (material === 'laminate') {
+                    laborCostPerSqft = 2;
+                } else if (material === 'hardwood') {
+                    laborCostPerSqft = 3;
+                } else if (material === 'engineered') {
+                    laborCostPerSqft = 2.5;
+                } else if (material === 'tile') {
+                    laborCostPerSqft = 4;
+                } else if (material === 'vinyl') {
+                    laborCostPerSqft = 1.5;
+                } else if (material === 'carpet') {
+                    laborCostPerSqft = 0.8;
+                }
+                
+                // Set removal cost if needed
+                if (removal === 'yes') {
+                    if (material === 'tile') {
+                        removalCostPerSqft = 2;
+                    } else {
+                        removalCostPerSqft = 1;
+                    }
+                }
+            }
+            
+            // Calculate totals
+            const materialTotal = materialCostPerSqft * sqft;
+            const laborTotal = laborCostPerSqft * sqft;
+            const removalTotal = removalCostPerSqft * sqft;
+            let totalCost = materialTotal + laborTotal + removalTotal + colorChangeCost;
+            
+            // Display results
+            document.getElementById('flooring-materials').textContent = `$${Math.round(materialTotal).toLocaleString()}`;
+            document.getElementById('flooring-labor').textContent = `$${Math.round(laborTotal).toLocaleString()}`;
+            
+            // Update breakdown based on project type
+            if (type === 'refinish') {
+                // Handle refinishing specific displays
+                document.getElementById('flooring-removal-item').style.display = 'none';
+                
+                // Check if color change item exists, add if not
+                let colorChangeItem = document.getElementById('flooring-color-change-item');
+                if (!colorChangeItem && colorChangeCost > 0) {
+                    const breakdownContainer = document.getElementById('flooring-breakdown');
+                    
+                    // Create new item before the last one
+                    colorChangeItem = document.createElement('div');
+                    colorChangeItem.id = 'flooring-color-change-item';
+                    colorChangeItem.className = 'breakdown-item';
+                    colorChangeItem.innerHTML = `
+                        <span>Color Change/Stain:</span>
+                        <span id="flooring-color-change-cost">$0</span>
+                    `;
+                    
+                    // Insert before total which is in a hidden div
+                    breakdownContainer.appendChild(colorChangeItem);
+                }
+                
+                if (colorChangeItem) {
+                    document.getElementById('flooring-color-change-cost').textContent = `$${Math.round(colorChangeCost).toLocaleString()}`;
+                    colorChangeItem.style.display = colorChangeCost > 0 ? 'flex' : 'none';
+                }
+            } else {
+                // Handle new installation displays
+                document.getElementById('flooring-removal').textContent = `$${Math.round(removalTotal).toLocaleString()}`;
+                document.getElementById('flooring-removal-item').style.display = document.getElementById('floor-removal').value === 'yes' ? 'flex' : 'none';
+                
+                // Hide color change item if it exists
+                const colorChangeItem = document.getElementById('flooring-color-change-item');
+                if (colorChangeItem) {
+                    colorChangeItem.style.display = 'none';
+                }
+            }
+            
+            document.getElementById('flooring-cost').textContent = `$${Math.round(totalCost).toLocaleString()}`;
+            
+            // Show breakdown
+            document.getElementById('flooring-result').style.display = 'block';
+            document.getElementById('flooring-breakdown').style.display = 'block';
+            
+            // Prepare estimate data for lead generation
+            const estimateData = {
+                projectType: type === 'refinish' ? 'Hardwood Refinishing' : `New ${material.charAt(0).toUpperCase() + material.slice(1)} Flooring`,
+                material: material,
+                quality: type === 'refinish' ? 'N/A' : document.getElementById('flooring-quality').value,
+                colorChange: type === 'refinish' ? document.getElementById('color-change').value : 'N/A',
+                squareFootage: sqft,
+                removal: type === 'refinish' ? 'N/A' : document.getElementById('floor-removal').value,
+                materialCost: Math.round(materialTotal),
+                laborCost: Math.round(laborTotal),
+                removalCost: Math.round(removalTotal),
+                colorChangeCost: Math.round(colorChangeCost),
+                totalCost: Math.round(totalCost)
+            };
+            
+            // Show lead form with the data
+            showLeadForm('flooring', estimateData);
+        }
+        
+        // Kitchen Calculator
+        function calculateKitchen() {
+            const size = document.getElementById('kitchen-size').value;
+            const quality = document.getElementById('kitchen-quality').value;
+            const layout = document.getElementById('kitchen-layout').value;
+            const cabinets = document.getElementById('kitchen-cabinets').value;
+            const countertops = document.getElementById('kitchen-countertops').value;
+            const appliances = document.getElementById('kitchen-appliances').value;
+            
+            // Add detailed information to result
+            let scopeDetails = "";
+            if (quality === 'budget') {
+                scopeDetails = "Basic Update: Simple refresh with paint, hardware, and minor upgrades.";
+            } else if (quality === 'standard') {
+                scopeDetails = "Full Remodel: Complete renovation with new cabinets, countertops, and fixtures.";
+            } else if (quality === 'premium') {
+                scopeDetails = "High-End Remodel: Premium materials, custom features, and high-quality appliances.";
+            } else if (quality === 'luxury') {
+                scopeDetails = "Luxury Renovation: Designer finishes, professional-grade appliances, and custom cabinetry.";
+            }
+            
+            let basePrice = 0;
+            let cabCounterCost = 0;
+            let applianceCost = 0;
+            let laborCost = 0;
+            let plumbElecCost = 0;
+            
+            // Base price by size
+            if (size === 'small') {
+                basePrice = 10000;
+                cabCounterCost = 5000;
+                laborCost = 3000;
+                plumbElecCost = 2000;
+            } else if (size === 'medium') {
+                basePrice = 20000;
+                cabCounterCost = 10000;
+                laborCost = 6000;
+                plumbElecCost = 4000;
+            } else if (size === 'large') {
+                basePrice = 30000;
+                cabCounterCost = 15000;
+                laborCost = 9000;
+                plumbElecCost = 6000;
+            } else if (size === 'xlarge') {
+                basePrice = 40000;
+                cabCounterCost = 20000;
+                laborCost = 12000;
+                plumbElecCost = 8000;
+            }
+            
+            // Quality multiplier
+            let qualityMultiplier = 1;
+            if (quality === 'budget') {
+                qualityMultiplier = 0.8;
+            } else if (quality === 'standard') {
+                qualityMultiplier = 1;
+            } else if (quality === 'premium') {
+                qualityMultiplier = 1.5;
+            } else if (quality === 'luxury') {
+                qualityMultiplier = 2.5;
+            }
+            
+            // Appliance package
+            if (appliances === 'budget') {
+                applianceCost = 2000;
+            } else if (appliances === 'standard') {
+                applianceCost = 5000;
+            } else if (appliances === 'premium') {
+                applianceCost = 10000;
+            } else if (appliances === 'luxury') {
+                applianceCost = 20000;
+            }
+            
+            // Cabinet adjustment
+            let cabinetMultiplier = 1;
+            if (cabinets === 'stock') {
+                cabinetMultiplier = 0.8;
+            } else if (cabinets === 'semi-custom') {
+                cabinetMultiplier = 1;
+            } else if (cabinets === 'custom') {
+                cabinetMultiplier = 1.7;
+            }
+            
+            // Countertop adjustment
+            let countertopMultiplier = 1;
+            if (countertops === 'laminate') {
+                countertopMultiplier = 0.6;
+            } else if (countertops === 'butcher') {
+                countertopMultiplier = 0.8;
+            } else if (countertops === 'granite') {
+                countertopMultiplier = 1;
+            } else if (countertops === 'quartz') {
+                countertopMultiplier = 1.2;
+            } else if (countertops === 'marble') {
+                countertopMultiplier = 1.5;
+            }
+            
+            // Layout change
+            let layoutCost = 0;
+            if (layout === 'minor') {
+                layoutCost = basePrice * 0.1;
+                plumbElecCost *= 1.3;
+            } else if (layout === 'major') {
+                layoutCost = basePrice * 0.25;
+                plumbElecCost *= 1.7;
+            }
+            
+            // Apply multipliers
+            cabCounterCost = cabCounterCost * cabinetMultiplier * countertopMultiplier * qualityMultiplier;
+            laborCost = laborCost * qualityMultiplier + layoutCost;
+            plumbElecCost = plumbElecCost * qualityMultiplier;
+            
+            const totalCost = cabCounterCost + applianceCost + laborCost + plumbElecCost;
+            
+            // Display results
+            document.getElementById('kitchen-cab-counter').textContent = `$${Math.round(cabCounterCost).toLocaleString()}`;
+            document.getElementById('kitchen-appl').textContent = `$${Math.round(applianceCost).toLocaleString()}`;
+            document.getElementById('kitchen-labor').textContent = `$${Math.round(laborCost).toLocaleString()}`;
+            document.getElementById('kitchen-plumb-elec').textContent = `$${Math.round(plumbElecCost).toLocaleString()}`;
+            document.getElementById('kitchen-cost').textContent = `$${Math.round(totalCost).toLocaleString()}`;
+            
+            // Add scope details to the result
+            const resultContainer = document.getElementById('kitchen-result');
+            const scopeElement = document.getElementById('kitchen-scope-details');
+            
+            if (scopeElement) {
+                scopeElement.textContent = scopeDetails;
+            } else {
+                const scopePara = document.createElement('p');
+                scopePara.id = 'kitchen-scope-details';
+                scopePara.style.fontSize = '14px';
+                scopePara.style.marginTop = '10px';
+                scopePara.style.fontStyle = 'italic';
+                scopePara.style.color = 'white';
+                scopePara.textContent = scopeDetails;
+                resultContainer.appendChild(scopePara);
+            }
+            
+            // Show breakdown
+            document.getElementById('kitchen-result').style.display = 'block';
+            document.getElementById('kitchen-breakdown').style.display = 'block';
+            
+            // Prepare estimate data for lead generation
+            const estimateData = {
+                kitchenSize: size,
+                scope: quality,
+                layout: layout,
+                cabinets: cabinets,
+                countertops: countertops,
+                appliances: appliances,
+                cabCounterCost: Math.round(cabCounterCost),
+                applianceCost: Math.round(applianceCost),
+                laborCost: Math.round(laborCost),
+                plumbElecCost: Math.round(plumbElecCost),
+                totalCost: Math.round(totalCost),
+                scopeDetails: scopeDetails
+            };
+            
+            // Show lead form with the data
+            showLeadForm('kitchen', estimateData);
+        }
+        
+        // Bathroom Calculator
+        function calculateBathroom() {
+            const type = document.getElementById('bathroom-type').value;
+            const quality = document.getElementById('bathroom-quality').value;
+            const layout = document.getElementById('bathroom-layout').value;
+            const fixtures = document.getElementById('bathroom-fixtures').value;
+            const tile = document.getElementById('bathroom-tile').value;
+            const vanity = document.getElementById('bathroom-vanity').value;
+            
+            // Add detailed information to result
+            let scopeDetails = "";
+            if (quality === 'budget') {
+                scopeDetails = "Basic Update: Simple refresh with essential upgrades and budget fixtures.";
+            } else if (quality === 'standard') {
+                scopeDetails = "Full Remodel: Complete renovation with new fixtures, tile work, and vanity.";
+            } else if (quality === 'premium') {
+                scopeDetails = "High-End Remodel: Premium materials, walk-in shower, and custom features.";
+            } else if (quality === 'luxury') {
+                scopeDetails = "Luxury Spa Renovation: Heated floors, high-end fixtures, and designer finishes.";
+            }
+            
+            let basePrice = 0;
+            let fixturesVanityCost = 0;
+            let tileFlooringCost = 0;
+            let laborCost = 0;
+            let plumbElecCost = 0;
+            
+            // Base price by type
+            if (type === 'powder') {
+                basePrice = 5000;
+                fixturesVanityCost = 1500;
+                tileFlooringCost = 1000;
+                laborCost = 1500;
+                plumbElecCost = 1000;
+            } else if (type === 'full') {
+                basePrice = 10000;
+                fixturesVanityCost = 3000;
+                tileFlooringCost = 2500;
+                laborCost = 3000;
+                plumbElecCost = 1500;
+            } else if (type === 'master') {
+                basePrice = 20000;
+                fixturesVanityCost = 6000;
+                tileFlooringCost = 5000;
+                laborCost = 6000;
+                plumbElecCost = 3000;
+            }
+            
+            // Quality multiplier
+            let qualityMultiplier = 1;
+            if (quality === 'budget') {
+                qualityMultiplier = 0.8;
+            } else if (quality === 'standard') {
+                qualityMultiplier = 1;
+            } else if (quality === 'premium') {
+                qualityMultiplier = 1.5;
+            } else if (quality === 'luxury') {
+                qualityMultiplier = 2.5;
+            }
+            
+            // Vanity adjustment
+            let vanityMultiplier = 1;
+            if (vanity === 'pedestal') {
+                vanityMultiplier = 0.7;
+            } else if (vanity === 'stock') {
+                vanityMultiplier = 0.8;
+            } else if (vanity === 'semi-custom') {
+                vanityMultiplier = 1;
+            } else if (vanity === 'custom') {
+                vanityMultiplier = 1.8;
+            } else if (vanity === 'double') {
+                vanityMultiplier = 1.8;
+            }
+            
+            // Tile adjustment
+            let tileMultiplier = 1;
+            if (tile === 'minimal') {
+                tileMultiplier = 0.6;
+            } else if (tile === 'partial') {
+                tileMultiplier = 1;
+            } else if (tile === 'full') {
+                tileMultiplier = 1.7;
+            } else if (tile === 'custom') {
+                tileMultiplier = 2.2;
+            }
+            
+            // Fixtures adjustment
+            let fixturesMultiplier = 1;
+            if (fixtures === 'toilet') {
+                fixturesMultiplier = 0.4;
+            } else if (fixtures === 'some') {
+                fixturesMultiplier = 0.7;
+            } else if (fixtures === 'all') {
+                fixturesMultiplier = 1;
+            }
+            
+            // Layout change
+            let layoutCost = 0;
+            if (layout === 'minor') {
+                layoutCost = basePrice * 0.1;
+                plumbElecCost *= 1.3;
+            } else if (layout === 'major') {
+                layoutCost = basePrice * 0.25;
+                plumbElecCost *= 1.7;
+            }
+            
+            // Apply multipliers
+            fixturesVanityCost = fixturesVanityCost * vanityMultiplier * fixturesMultiplier * qualityMultiplier;
+            tileFlooringCost = tileFlooringCost * tileMultiplier * qualityMultiplier;
+            laborCost = laborCost * qualityMultiplier + layoutCost;
+            plumbElecCost = plumbElecCost * qualityMultiplier;
+            
+            const totalCost = fixturesVanityCost + tileFlooringCost + laborCost + plumbElecCost;
+            
+            // Display results
+            document.getElementById('bathroom-fix-vanity').textContent = `$${Math.round(fixturesVanityCost).toLocaleString()}`;
+            document.getElementById('bathroom-tile-floor').textContent = `$${Math.round(tileFlooringCost).toLocaleString()}`;
+            document.getElementById('bathroom-labor').textContent = `$${Math.round(laborCost).toLocaleString()}`;
+            document.getElementById('bathroom-plumb-elec').textContent = `$${Math.round(plumbElecCost).toLocaleString()}`;
+            document.getElementById('bathroom-cost').textContent = `$${Math.round(totalCost).toLocaleString()}`;
+            
+            // Add scope details to the result
+            const resultContainer = document.getElementById('bathroom-result');
+            const scopeElement = document.getElementById('bathroom-scope-details');
+            
+            if (scopeElement) {
+                scopeElement.textContent = scopeDetails;
+            } else {
+                const scopePara = document.createElement('p');
+                scopePara.id = 'bathroom-scope-details';
+                scopePara.style.fontSize = '14px';
+                scopePara.style.marginTop = '10px';
+                scopePara.style.fontStyle = 'italic';
+                scopePara.style.color = 'white';
+                scopePara.textContent = scopeDetails;
+                resultContainer.appendChild(scopePara);
+            }
+            
+            // Show breakdown
+            document.getElementById('bathroom-result').style.display = 'block';
+            document.getElementById('bathroom-breakdown').style.display = 'block';
+            
+            // Prepare estimate data for lead generation
+            const estimateData = {
+                bathroomType: type,
+                scope: quality,
+                layout: layout,
+                fixtures: fixtures,
+                tile: tile,
+                vanity: vanity,
+                fixturesVanityCost: Math.round(fixturesVanityCost),
+                tileFlooringCost: Math.round(tileFlooringCost),
+                laborCost: Math.round(laborCost),
+                plumbElecCost: Math.round(plumbElecCost),
+                totalCost: Math.round(totalCost),
+                scopeDetails: scopeDetails
+            };
+            
+            // Show lead form with the data
+            showLeadForm('bathroom', estimateData);
+        }
+        
+        // Basement Calculator
+        function calculateBasement() {
+            const sqft = Number(document.getElementById('basement-sqft').value);
+            const quality = document.getElementById('basement-quality').value;
+            const finished = document.getElementById('basement-finished').value;
+            const bathroom = document.getElementById('basement-bathroom').value;
+            const wetbar = document.getElementById('basement-wetbar').value;
+            const egress = document.getElementById('basement-egress').value;
+            
+            // Add detailed information to result
+            let scopeDetails = "";
+            if (quality === 'budget') {
+                scopeDetails = "Basic Finish: Essential drywall, simple flooring, and basic lighting fixtures.";
+            } else if (quality === 'standard') {
+                scopeDetails = "Full Finish: Proper insulation, quality flooring, and recessed lighting.";
+            } else if (quality === 'premium') {
+                scopeDetails = "High-End Finish: Entertainment areas, office space, and premium materials.";
+            } else if (quality === 'luxury') {
+                scopeDetails = "Luxury Build-Out: Home theater, custom bar, and designer features.";
+            }
+            
+            // Base costs per square foot
+            let framingCost = 0;
+            let flooringCost = 0;
+            let plumbElecCost = 0;
+            let bathroomCost = 0;
+            let wetbarCost = 0;
+            let egressCost = 0;
+            let laborCost = 0;
+            
+            // Base costs by condition
+            if (finished === 'unfinished') {
+                framingCost = 15 * sqft; // walls, ceiling, insulation
+                flooringCost = 7 * sqft; // flooring and finishing
+                plumbElecCost = 10 * sqft; // basic electrical and plumbing
+                laborCost = 12 * sqft; // installation and finishing
+            } else if (finished === 'partially') {
+                framingCost = 10 * sqft;
+                flooringCost = 7 * sqft;
+                plumbElecCost = 7 * sqft;
+                laborCost = 8 * sqft;
+            } else if (finished === 'finished') {
+                framingCost = 5 * sqft; // some repairs and updates
+                flooringCost = 7 * sqft;
+                plumbElecCost = 5 * sqft;
+                laborCost = 5 * sqft;
+            }
+            
+            // Quality multiplier
+            let qualityMultiplier = 1;
+            if (quality === 'budget') {
+                qualityMultiplier = 0.8;
+            } else if (quality === 'standard') {
+                qualityMultiplier = 1;
+            } else if (quality === 'premium') {
+                qualityMultiplier = 1.5;
+            } else if (quality === 'luxury') {
+                qualityMultiplier = 2.2;
+            }
+            
+      // Bathroom cost
+            if (bathroom === 'half') {
+                bathroomCost = 5000;
+            } else if (bathroom === 'full') {
+                bathroomCost = 12000;
+            }
+            
+            // Wet bar/kitchenette cost
+            if (wetbar === 'wetbar') {
+                wetbarCost = 3500;
+            } else if (wetbar === 'kitchenette') {
+                wetbarCost = 7500;
+            }
+            
+            // Egress cost
+            if (egress === 'window') {
+                egressCost = 3500;
+            } else if (egress === 'door') {
+                egressCost = 5000;
+            }
+            
+            // Apply multipliers
+            framingCost = framingCost * qualityMultiplier;
+            flooringCost = flooringCost * qualityMultiplier;
+            plumbElecCost = plumbElecCost * qualityMultiplier;
+            bathroomCost = bathroomCost * qualityMultiplier;
+            wetbarCost = wetbarCost * qualityMultiplier;
+            laborCost = laborCost * qualityMultiplier;
+            
+            const totalCost = framingCost + flooringCost + plumbElecCost + bathroomCost + wetbarCost + egressCost + laborCost;
+            
+            // Display results
+            document.getElementById('basement-framing').textContent = `$${Math.round(framingCost).toLocaleString()}`;
+            document.getElementById('basement-flooring').textContent = `$${Math.round(flooringCost).toLocaleString()}`;
+            document.getElementById('basement-plumb-elec').textContent = `$${Math.round(plumbElecCost).toLocaleString()}`;
+            document.getElementById('basement-cost').textContent = `$${Math.round(totalCost).toLocaleString()}`;
+            
+            // Show/hide optional costs
+            const bathroomItem = document.getElementById('basement-bathroom-item');
+            const wetbarItem = document.getElementById('basement-wetbar-item');
+            const egressItem = document.getElementById('basement-egress-item');
+            
+            bathroomItem.style.display = bathroom !== 'none' ? 'flex' : 'none';
+            wetbarItem.style.display = wetbar !== 'no' ? 'flex' : 'none';
+            egressItem.style.display = egress !== 'no' ? 'flex' : 'none';
+            
+            if (bathroom !== 'none') {
+                document.getElementById('basement-bath-cost').textContent = `$${Math.round(bathroomCost).toLocaleString()}`;
+            }
+            
+            if (wetbar !== 'no') {
+                document.getElementById('basement-wetbar-cost').textContent = `$${Math.round(wetbarCost).toLocaleString()}`;
+            }
+            
+            if (egress !== 'no') {
+                document.getElementById('basement-egress-cost').textContent = `$${Math.round(egressCost).toLocaleString()}`;
+            }
+            
+            // Add scope details to the result
+            const resultContainer = document.getElementById('basement-result');
+            const scopeElement = document.getElementById('basement-scope-details');
+            
+            if (scopeElement) {
+                scopeElement.textContent = scopeDetails;
+            } else {
+                const scopePara = document.createElement('p');
+                scopePara.id = 'basement-scope-details';
+                scopePara.style.fontSize = '14px';
+                scopePara.style.marginTop = '10px';
+                scopePara.style.fontStyle = 'italic';
+                scopePara.style.color = 'white';
+                scopePara.textContent = scopeDetails;
+                resultContainer.appendChild(scopePara);
+            }
+            
+            // Show breakdown
+            document.getElementById('basement-result').style.display = 'block';
+            document.getElementById('basement-breakdown').style.display = 'block';
+            
+            // Prepare estimate data for lead generation
+            const estimateData = {
+                squareFootage: sqft,
+                scope: quality,
+                currentState: finished,
+                bathroom: bathroom,
+                wetBar: wetbar,
+                egress: egress,
+                framingCost: Math.round(framingCost),
+                flooringCost: Math.round(flooringCost),
+                plumbElecCost: Math.round(plumbElecCost),
+                bathroomCost: Math.round(bathroomCost),
+                wetbarCost: Math.round(wetbarCost),
+                egressCost: Math.round(egressCost),
+                laborCost: Math.round(laborCost),
+                totalCost: Math.round(totalCost),
+                scopeDetails: scopeDetails
+            };
+            
+            // Show lead form with the data
+            showLeadForm('basement', estimateData);
+        }
+    </script>
+<script>
+    // Fix for lead form not showing
+    function forceShowLeadForm() {
+        // Get the lead form container
+        const leadFormContainer = document.getElementById('lead-form-container');
+        
+        if (!leadFormContainer) {
+            console.error("Lead form container not found!");
+            return;
+        }
+        
+        // Make sure it has the right styles to be visible
+        leadFormContainer.style.display = 'block';
+        
+        // Scroll to the form
+        leadFormContainer.scrollIntoView({behavior: 'smooth'});
+    }
+    
+    // Override the existing calculate functions
+    const originalCalculateFlooring = window.calculateFlooring;
+    window.calculateFlooring = function() {
+        if (originalCalculateFlooring) originalCalculateFlooring();
+        setTimeout(forceShowLeadForm, 500);
+    };
+    
+    const originalCalculateKitchen = window.calculateKitchen;
+    window.calculateKitchen = function() {
+        if (originalCalculateKitchen) originalCalculateKitchen();
+        setTimeout(forceShowLeadForm, 500);
+    };
+    
+    const originalCalculateBathroom = window.calculateBathroom;
+    window.calculateBathroom = function() {
+        if (originalCalculateBathroom) originalCalculateBathroom();
+        setTimeout(forceShowLeadForm, 500);
+    };
+    
+    const originalCalculateBasement = window.calculateBasement;
+    window.calculateBasement = function() {
+        if (originalCalculateBasement) originalCalculateBasement();
+        setTimeout(forceShowLeadForm, 500);
+    };
+</script>
+</body>
+</html>
